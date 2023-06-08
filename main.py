@@ -1,4 +1,7 @@
 import cv2
+from tkinter import Tk
+from tkinter.filedialog import askopenfilename
+import numpy as np
 
 # Fonction pour gérer les clics de souris
 def mouse_callback(event, x, y, flags, param):
@@ -16,8 +19,9 @@ def mouse_callback(event, x, y, flags, param):
             cropping = True
             cv2.destroyAllWindows()
 
-# Sélectionner le fichier d'image
-image_path = input("Entrez le chemin de l'image : ")
+# Ouvrir la boîte de dialogue pour sélectionner le fichier d'image
+Tk().withdraw()  # Cacher la fenêtre principale Tkinter
+image_path = askopenfilename(title="Sélectionner une image")
 
 # Charger l'image
 image = cv2.imread(image_path)
@@ -28,7 +32,7 @@ if image is None:
     exit()
 
 # Redimensionner l'image pour l'affichage (facultatif)
-scale_percent = 50  # Ajuster la valeur selon vos préférences
+scale_percent = 20  # Ajuster la valeur selon vos préférences
 width = int(image.shape[1] * scale_percent / 100)
 height = int(image.shape[0] * scale_percent / 100)
 image = cv2.resize(image, (width, height))
@@ -48,7 +52,7 @@ if len(points) != 4:
     exit()
 
 # Calculer les dimensions du rectangle
-width = 1000
+width = 1000    
 height = 2000
 
 # Définir les coordonnées des 4 coins du rectangle de destination
@@ -62,6 +66,7 @@ matrix = cv2.getPerspectiveTransform(
 
 # Appliquer la transformation perspective à l'image
 cropped_image = cv2.warpPerspective(image, matrix, (width, height))
+cv2.imwrite('test.jpg', cropped_image)
 
 # Afficher l'image recadrée et redimensionnée
 cv2.imshow("Cropped Image", cropped_image)
