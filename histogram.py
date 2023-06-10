@@ -2,7 +2,8 @@ import cv2
 import numpy as np
 from tkinter import Tk
 from tkinter.filedialog import askopenfilename
-import xlsxwriter
+from tkinter.filedialog import askopenfilenames
+
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -34,14 +35,21 @@ def main():
     # Créer une fenêtre Tkinter pour la boîte de dialogue de sélection de fichier
     Tk().withdraw()
 
-    for i in range(2):
-        # Afficher la boîte de dialogue pour sélectionner une image
-        image_path = askopenfilename()
+    file_names = askopenfilenames(
+    title="Sélectionnez des photos",
+    filetypes=(("Fichiers image", "*.jpg;*.jpeg;*.png"), ("Tous les fichiers", "*.*"))
+    )
 
+    # Affiche les chemins des fichiers sélectionnés
+    # Afficher la boîte de dialogue pour sélectionner une image
+        
+
+    
+    for file_name in file_names:
         # Vérifier si une image a été sélectionnée
-        if image_path:
+        if file_name:
             # Charger l'image avec OpenCV
-            image = cv2.imread(image_path)
+            image = cv2.imread(file_name)
 
             # Vérifier si l'image a été chargée avec succès
             if image is not None:
