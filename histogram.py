@@ -126,6 +126,7 @@ def main():
                     # Tronquer un canal de l'image
                     print(mouse_loc)
                     width = 10
+                    
                     red_channel=red_channel[:,mouse_loc[2]-width:mouse_loc[2]+width]
                     green_channel=green_channel[:,mouse_loc[2]-width:mouse_loc[2]+width]
                     blue_channel=blue_channel[:,mouse_loc[2]-width:mouse_loc[2]+width]
