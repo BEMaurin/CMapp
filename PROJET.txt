@@ -1,0 +1,16 @@
+créer plan d'analyse avec un ID produtit pour chaque canal
+
+prendre photo des plaques
+
+importe le plan
+
+compter le nombre de ligne sur le plan
+
+boucler transformation sur n-1 ligne
+
+boucler transformation sur le nombre de colonne 
+
+joindre données pour faire un multi index 1vl1 = echantillon, lvl2 = rf, colonne = réactif
+
+Annoter les plaques avec les noms des produits
+
