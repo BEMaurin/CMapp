@@ -4,6 +4,58 @@ import os
 from tkinter import Tk
 from tkinter.filedialog import askdirectory
 
+
+save_path = ""
+# save_path = "C:/Users/Asus/Downloads/Pause Diabolo Temp/Photo - Analyses/"
+
+SETTING_DELETE_RAW = False
+SETTING_DEBUG = True
+SETTING_SINGLE_FILE = False
+SETTING_MULTI_FILE = True
+
+def debug(param):
+    """ 
+    Afficher les informations de debuggage dans la console
+
+    args:
+        param (str): informations de debuggage
+    """
+    if SETTING_DEBUG == True:
+        print(param)
+        return
+
+
+# DEBUG
+debug(save_path)
+
+def pythagore(a,b):
+    """ calcul de longueur de côté par pythagore
+    args:
+        a (int): coordonnée 1
+        b (int): coordonnée 2
+
+    returns:
+        longueur (in): longueur de côté
+        """
+    longueur = ((a[0]-b[0])**2+(a[1]-b[1])**2)**(1/2)
+    return longueur
+
+def proportions(list):
+    """ 
+    Calcul du ratio longueur/hauteur de la plaque CCM
+    args:
+        list(list): list des coordonées x,y des 4 points
+
+    returns:
+        ratio (float): ratio des longueurs
+        """    
+    a,b,c,d = list[0],list[1],list[2],list[3]
+
+    gauche = (pythagore(a,b)+pythagore(c,d))/2
+    droite = (pythagore(b,c)+pythagore(d,a))/2
+    ratio = droite/gauche
+
+    return ratio
 # Fonction pour gérer les clics de souris
 def mouse_callback(event, x, y, flags, param):
     global points, cropping
@@ -43,6 +95,8 @@ if not image_paths:
     print("Aucune image n'a été trouvée dans le dossier sélectionné.")
     exit()
 
+debug(len(image_paths)) # affche le nombre d'objects sélectionnés 
+
 # Parcourir les images et appliquer l'algorithme de sélection des points et de transformation
 for image_path in image_paths:
     # Charger l'image
@@ -54,7 +108,7 @@ for image_path in image_paths:
         continue
 
     # Redimensionner l'image pour l'affichage (facultatif)
-    scale_percent = 15  # Ajuster la valeur selon vos préférences
+    scale_percent = 20  # Ajuster la valeur selon vos préférences
     width = int(image.shape[1] * scale_percent / 100)
     height = int(image.shape[0] * scale_percent / 100)
     image = cv2.resize(image, (width, height))
@@ -73,9 +127,9 @@ for image_path in image_paths:
         print(f"Veuillez sélectionner 4 points sur l'image : {image_path}")
         continue
 
-    # Calculer les dimensions du rectangle
-    width = 1000
+    # Déclarer les dimensions du rectangle
     height = 2000
+    width = int(height/ proportions(points))
 
     # Définir les coordonnées des 4 coins du rectangle de destination
     dst_points = [(0, 0), (width, 0), (width, height), (0, height)]
@@ -89,11 +143,30 @@ for image_path in image_paths:
     # Appliquer la transformation perspective à l'image
     cropped_image = cv2.warpPerspective(image, matrix, (width, height))
     print(str(folder_path))
-    print(str(image_path[-20:]))
-    cv2.imwrite(str(folder_path)+str(image_path[-20:]), cropped_image)
-    # Afficher l'image recadrée et redimensionnée
-    # cv2.imshow("Cropped Image", cropped_image)
-    cv2.waitKey(0)
+    print(str(filename))
+    print(image_path)
+    
+    # Redimensionner et afficher l'image transformée 
+    width = int(cropped_image.shape[1] * scale_percent / 100)
+    height = int(cropped_image.shape[0] * scale_percent / 100)
+    image = cv2.resize(cropped_image, (width, height))
+    cv2.imshow("Cropped Image", image)
+
+    # Afficher l'image transformée
+    while True:
+        if cv2.waitKey(1000) & 0xFF == ord('\r'):
+            # Supprimmer les photos brut 
+            if SETTING_DELETE_RAW == True:
+                os.remove(image_path)
+                print('deleted successfully')
+            break
+        if cv2.waitKey(1) & 0xFF == 27:
+            break 
+    print('saved: ',str(save_path)+os.path.basename(image_path))
+    cv2.imwrite(str(save_path)+os.path.basename(image_path), cropped_image)
+    cv2.destroyAllWindows()
+        
+    
 
 # Fermer toutes les fenêtres affichant les images
 cv2.destroyAllWindows()
