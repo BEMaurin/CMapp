@@ -249,6 +249,7 @@ def main():
 
 
 
+
             else:
                 print('Erreur lors du chargement de l\'image.')
 
@@ -277,14 +278,15 @@ def main():
             if event.button == 1:  # Clic gauche de la souris
                 rf = pd.concat([rf,pd.DataFrame([["",np.round(event.xdata,2),""]],columns=['Echantillon',Revelateur,"produit"])],join="inner")
                 rf.to_clipboard(index=False)
+                
         cid = fig.canvas.mpl_connect('button_press_event', onclick)
-
         plt.xlabel('Distance')
         plt.ylabel('Intensité')
         plt.title('Migration')
         plt.show()
         # Fermeture de la fenêtre
-
+        
+    
 if __name__ == '__main__':
 
     main()

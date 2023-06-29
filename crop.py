@@ -6,7 +6,7 @@ from tkinter.filedialog import askdirectory
 
 
 save_path = ""
-# save_path = "C:/Users/Asus/Downloads/Pause Diabolo Temp/Photo - Analyses/"
+save_path = "C:/Users/Asus/OneDrive - ASSOCIATION LE MAS/Analyses/Juin/22/"
 
 SETTING_DELETE_RAW = False
 SETTING_DEBUG = True
